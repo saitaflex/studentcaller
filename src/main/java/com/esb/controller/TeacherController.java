@@ -60,6 +60,15 @@ public class TeacherController {
 		return teacherService.listTeachers();
 	}
 
+	@Operation(summary = "Find teachers by department name",
+			description = "Custom JPQL query (`@Query`): teachers whose department has this name, ignoring case. "
+					+ "Returns an empty list if there is none.")
+	@GetMapping("/department/{departmentName}")
+	public List<Teacher> listTeachersByDepartmentName(
+			@Parameter(description = "Department name", example = "Computer Science") @PathVariable String departmentName) {
+		return teacherService.listTeachersByDepartmentName(departmentName);
+	}
+
 	@Operation(summary = "Get one teacher")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Teacher found"),
 			@ApiResponse(responseCode = "404", description = "Unknown id",

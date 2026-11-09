@@ -77,6 +77,40 @@ public class RoomController {
 		return roomService.listAvailableRoomsByCapacity(minCapacity);
 	}
 
+	@Operation(summary = "Find available rooms by equipment",
+			description = "Available rooms that have the given equipment, e.g. `Projector` (custom query 6, navigates the Many-to-Many).")
+	@GetMapping("/available/equipment")
+	public List<Room> listAvailableRoomsByEquipment(
+			@Parameter(description = "Equipment name (case-insensitive)", example = "Projector") @RequestParam String name) {
+		return roomService.listAvailableRoomsByEquipment(name);
+	}
+
+	@Operation(summary = "Install an equipment in a room", description = "Adds a row in the Many-to-Many join table `room_equipment`.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Equipment added; the room is returned with its equipment list"),
+			@ApiResponse(responseCode = "400", description = "Equipment already in the room",
+					content = @Content(mediaType = ApiDocs.JSON, examples = @ExampleObject(value = "{\"error\": \"Room already has this equipment\"}"))),
+			@ApiResponse(responseCode = "404", description = "Room or equipment not found", content = @Content(mediaType = ApiDocs.JSON,
+					examples = { @ExampleObject(name = "Room", value = ApiDocs.ROOM_NOT_FOUND),
+							@ExampleObject(name = "Equipment", value = ApiDocs.EQUIPMENT_NOT_FOUND) })) })
+	@PutMapping("/{roomId}/equipments/{equipmentId}")
+	public Room addEquipmentToRoom(@Parameter(description = "Room id", example = "1") @PathVariable Long roomId,
+			@Parameter(description = "Equipment id", example = "1") @PathVariable Long equipmentId) {
+		return roomService.addEquipmentToRoom(roomId, equipmentId);
+	}
+
+	@Operation(summary = "Remove an equipment from a room")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Equipment removed"),
+			@ApiResponse(responseCode = "400", description = "Equipment not in the room",
+					content = @Content(mediaType = ApiDocs.JSON, examples = @ExampleObject(value = "{\"error\": \"Room does not have this equipment\"}"))),
+			@ApiResponse(responseCode = "404", description = "Room or equipment not found", content = @Content(mediaType = ApiDocs.JSON,
+					examples = { @ExampleObject(name = "Room", value = ApiDocs.ROOM_NOT_FOUND),
+							@ExampleObject(name = "Equipment", value = ApiDocs.EQUIPMENT_NOT_FOUND) })) })
+	@DeleteMapping("/{roomId}/equipments/{equipmentId}")
+	public Room removeEquipmentFromRoom(@Parameter(description = "Room id", example = "1") @PathVariable Long roomId,
+			@Parameter(description = "Equipment id", example = "1") @PathVariable Long equipmentId) {
+		return roomService.removeEquipmentFromRoom(roomId, equipmentId);
+	}
+
 	@Operation(summary = "Get one room")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Room found"),
 			@ApiResponse(responseCode = "404", description = "Unknown id",

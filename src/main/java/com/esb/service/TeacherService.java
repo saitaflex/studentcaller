@@ -30,6 +30,10 @@ public class TeacherService {
 		return teacherRepo.findAll();
 	}
 
+	public List<Teacher> listTeachersByDepartmentName(String departmentName) {
+		return teacherRepo.findByDepartmentName(departmentName);
+	}
+
 	public Teacher findTeacherById(Long id) {
 		return teacherRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Teacher not found"));
 	}

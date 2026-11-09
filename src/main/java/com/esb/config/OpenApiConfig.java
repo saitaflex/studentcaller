@@ -37,6 +37,7 @@ public class OpenApiConfig {
 			| 2 | `POST /api/buildings` | a building with its new `id` |
 			| 3 | `POST /api/teachers` | a teacher linked to the department |
 			| 4 | `POST /api/rooms` | a room, status `AVAILABLE` |
+			| 4b | `POST /api/equipments` then `PUT /api/rooms/{roomId}/equipments/{equipmentId}` | the room now lists its equipment |
 			| 5 | `POST /api/reservations/{teacherId}/{roomId}/{hours}` | `totalAmount` computed, room becomes `RESERVED` |
 			| 6 | `PUT /api/reservations/{id}/extend` | end time and total increased |
 			| 7 | `POST /api/payments/{reservationId}?amount=…` | payment `PAID` (amount must match the total) |
@@ -50,7 +51,8 @@ public class OpenApiConfig {
 			- Only a `PENDING` reservation can be completed, extended or cancelled.
 			- A reservation is paid **once**, with the **exact** total; a cancelled reservation cannot be paid.
 			- A paid reservation cannot be extended, and a `PAID` payment cannot go back to `PENDING`.
-			- A teacher email is unique.
+			- A teacher email and an equipment name are unique.
+			- Equipment is installed in rooms (Many-to-Many); a room cannot get the same equipment twice.
 			- A record still used by another one (e.g. a building with rooms) cannot be deleted.
 
 			### Status codes
@@ -76,7 +78,8 @@ public class OpenApiConfig {
 						new Tag().name("2. Teachers").description("Teachers who reserve rooms"),
 						new Tag().name("3. Buildings").description("School buildings that contain rooms"),
 						new Tag().name("4. Rooms").description("Classrooms, labs and halls, with capacity and hourly price"),
-						new Tag().name("5. Reservations").description("Reserve, extend, complete or cancel a room reservation"),
-						new Tag().name("6. Payments").description("Settle a reservation")));
+						new Tag().name("5. Equipment").description("Equipment installed in rooms (Many-to-Many with rooms)"),
+						new Tag().name("6. Reservations").description("Reserve, extend, complete or cancel a room reservation"),
+						new Tag().name("7. Payments").description("Settle a reservation")));
 	}
 }

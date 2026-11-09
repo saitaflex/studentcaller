@@ -17,4 +17,5 @@ public final class ApiDocs {
 	public static final String ROOM_NOT_FOUND = "{\"error\": \"Room not found\"}";
 	public static final String RESERVATION_NOT_FOUND = "{\"error\": \"Reservation not found\"}";
 	public static final String PAYMENT_NOT_FOUND = "{\"error\": \"Payment not found\"}";
+	public static final String EQUIPMENT_NOT_FOUND = "{\"error\": \"Equipment not found\"}";
 }

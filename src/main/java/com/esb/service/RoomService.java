@@ -5,7 +5,9 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.esb.model.Equipment;
 import com.esb.model.Room;
 import com.esb.model.RoomStatus;
 import com.esb.repository.RoomRepository;
@@ -17,6 +19,9 @@ public class RoomService {
 
 	@Autowired
 	BuildingService buildingService;
+
+	@Autowired
+	EquipmentService equipmentService;
 
 	public Room addRoom(Room room) {
 		room.setBuilding(buildingService.findBuildingById(buildingId(room)));
@@ -34,6 +39,10 @@ public class RoomService {
 
 	public List<Room> listAvailableRoomsByCapacity(int capacity) {
 		return roomRepo.findByStatusAndCapacityGreaterThanEqual(RoomStatus.AVAILABLE, capacity);
+	}
+
+	public List<Room> listAvailableRoomsByEquipment(String equipmentName) {
+		return roomRepo.findByStatusAndEquipmentsNameIgnoreCase(RoomStatus.AVAILABLE, equipmentName);
 	}
 
 	public Room findRoomById(Long id) {
@@ -64,5 +73,25 @@ public class RoomService {
 			throw new IllegalStateException("Building id is required");
 		}
 		return room.getBuilding().getId();
+	}
+
+	@Transactional
+	public Room addEquipmentToRoom(Long roomId, Long equipmentId) {
+		Room room = findRoomById(roomId);
+		Equipment equipment = equipmentService.findEquipmentById(equipmentId);
+		if (!room.getEquipments().add(equipment)) {
+			throw new IllegalStateException("Room already has this equipment");
+		}
+		return roomRepo.save(room);
+	}
+
+	@Transactional
+	public Room removeEquipmentFromRoom(Long roomId, Long equipmentId) {
+		Room room = findRoomById(roomId);
+		Equipment equipment = equipmentService.findEquipmentById(equipmentId);
+		if (!room.getEquipments().remove(equipment)) {
+			throw new IllegalStateException("Room does not have this equipment");
+		}
+		return roomRepo.save(room);
 	}
 }

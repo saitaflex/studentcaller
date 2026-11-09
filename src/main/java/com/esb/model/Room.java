@@ -1,11 +1,12 @@
 package com.esb.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -50,6 +53,15 @@ public class Room {
 	@JoinColumn(name = "building_id")
 	@Schema(description = "Building of the room (only its id is needed when sending)")
 	private Building building;
+
+	// Owning side of the Many-to-Many: Hibernate fills the join table room_equipment
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@ManyToMany
+	@JoinTable(name = "room_equipment", joinColumns = @JoinColumn(name = "room_id"),
+			inverseJoinColumns = @JoinColumn(name = "equipment_id"))
+	@Schema(description = "Equipment installed in the room - managed with PUT/DELETE /api/rooms/{roomId}/equipments/{equipmentId}",
+			accessMode = Schema.AccessMode.READ_ONLY)
+	private Set<Equipment> equipments = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -97,5 +109,13 @@ public class Room {
 
 	public void setBuilding(Building building) {
 		this.building = building;
+	}
+
+	public Set<Equipment> getEquipments() {
+		return equipments;
+	}
+
+	public void setEquipments(Set<Equipment> equipments) {
+		this.equipments = equipments;
 	}
 }

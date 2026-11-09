@@ -13,4 +13,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
 	// Custom query 2: available rooms with at least a given capacity
 	List<Room> findByStatusAndCapacityGreaterThanEqual(RoomStatus status, int capacity);
+
+	// Custom query 6: available rooms that have a given equipment (navigates the Many-to-Many)
+	List<Room> findByStatusAndEquipmentsNameIgnoreCase(RoomStatus status, String equipmentName);
 }

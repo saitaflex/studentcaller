@@ -31,7 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/reservations")
-@Tag(name = "5. Reservations")
+@Tag(name = "6. Reservations")
 public class ReservationController {
 
 	private static final String NOT_PENDING = "{\"error\": \"Reservation is not active\"}";

@@ -184,3 +184,16 @@ left out:
 - Controllers: `@Tag`, `@Operation` (summary + description), every response code documented with example bodies, parameters with descriptions and example values, ready-to-run request body examples.
 - Models: `@Schema` descriptions and examples on every field; generated/managed fields (`id`, room `status`) marked read-only.
 - `application.properties`: "Try it out" enabled by default, endpoint search filter, request duration, JSON as default media type.
+
+---
+
+## 7. Alignment with the DS1 brief (DS1_Spring_Boot_Project.docx)
+
+| Brief requirement | What was done |
+|---|---|
+| Relationships "OneToMany, ManyToMany, etc." | New 7th entity **Equipment**, `@ManyToMany` with Room (join table `room_equipment`); install/remove endpoints `PUT/DELETE /api/rooms/{roomId}/equipments/{equipmentId}` |
+| At least 3 relevant custom queries | Now 6, including a **JPQL `@Query`** (`TeacherRepository.findByDepartmentName`) and a query through the Many-to-Many (`RoomRepository.findByStatusAndEquipmentsNameIgnoreCase`) |
+| Full CRUD | `EquipmentController` with full CRUD; new endpoint `GET /api/teachers/department/{departmentName}` |
+| Postman: functional + error tests, exported collection | New `Postman/StudentCaller.postman_collection.json`: 32 requests (19 functional, 13 error), each with an automatic status test; verified end to end on an empty database (0 failures). Old request 16 (wrong amount on an already-paid reservation) fixed to target an unpaid one |
+| README: context, entities, endpoints, execution | README rewritten: 7 entities, relationships table, 6 custom queries, all endpoints, Swagger, unit tests, port/password notes; screenshot links fixed (they pointed to files that did not exist) |
+| `test/` folder | `RoomServiceTest` added (17 unit tests in total) |
