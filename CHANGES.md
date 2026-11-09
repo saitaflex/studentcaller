@@ -177,3 +177,10 @@ left out:
 - Pages:
   - `http://localhost:8080/swagger-ui.html` – interactive documentation of all endpoints ("Try it out")
   - `http://localhost:8080/v3/api-docs` – OpenAPI JSON
+
+### Swagger documentation enriched
+- `config/OpenApiConfig.java`: API title, a homepage guide (2-minute scenario, business rules, status codes) and the endpoint groups numbered in workflow order (Departments → Teachers → Buildings → Rooms → Reservations → Payments).
+- `config/ApiDocs.java`: shared example error bodies.
+- Controllers: `@Tag`, `@Operation` (summary + description), every response code documented with example bodies, parameters with descriptions and example values, ready-to-run request body examples.
+- Models: `@Schema` descriptions and examples on every field; generated/managed fields (`id`, room `status`) marked read-only.
+- `application.properties`: "Try it out" enabled by default, endpoint search filter, request duration, JSON as default media type.

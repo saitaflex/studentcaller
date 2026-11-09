@@ -1,5 +1,7 @@
 package com.esb.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,28 +20,35 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
+@Schema(description = "A classroom, lab or hall that can be reserved")
 public class Room {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "Generated id", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
 	private Long id;
 
 	@NotBlank(message = "Room name is required")
+	@Schema(description = "Room name", example = "A101")
 	private String name;
 
 	@Min(value = 1, message = "Capacity must be at least 1")
+	@Schema(description = "Number of seats (at least 1)", example = "30")
 	private int capacity;
 
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
+	@Schema(description = "AVAILABLE or RESERVED - managed automatically by reservations", example = "AVAILABLE", accessMode = Schema.AccessMode.READ_ONLY)
 	private RoomStatus status;
 
 	@NotNull(message = "Price per hour is required")
 	@PositiveOrZero(message = "Price per hour must be positive")
+	@Schema(description = "Price of one hour", example = "10.00")
 	private BigDecimal pricePerHour;
 
 	@NotNull(message = "Building is required")
 	@ManyToOne
 	@JoinColumn(name = "building_id")
+	@Schema(description = "Building of the room (only its id is needed when sending)")
 	private Building building;
 
 	public Long getId() {

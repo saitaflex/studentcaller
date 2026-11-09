@@ -1,5 +1,7 @@
 package com.esb.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,14 +14,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Schema(description = "A school building that contains rooms")
 public class Building {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "Generated id", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
 	private Long id;
 
 	@NotBlank(message = "Building name is required")
+	@Schema(description = "Building name", example = "Bloc A")
 	private String name;
 
+	@Schema(description = "Address (optional)", example = "Campus Nord, Tunis")
 	private String address;
 
 	@JsonIgnore

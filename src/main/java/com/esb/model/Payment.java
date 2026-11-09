@@ -1,5 +1,7 @@
 package com.esb.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -13,18 +15,24 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
+@Schema(description = "Settlement of a reservation (one per reservation)")
 public class Payment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "Generated id", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
 	private Long id;
 
 	@OneToOne
 	@JoinColumn(name = "reservation_id", unique = true)
+	@Schema(description = "The paid reservation")
 	private Reservation reservation;
 
+	@Schema(description = "Date of payment", example = "2026-11-09")
 	private LocalDate paymentDate;
+	@Schema(description = "Amount paid = reservation totalAmount", example = "20.00")
 	private BigDecimal amount;
 	@Enumerated(EnumType.STRING)
+	@Schema(description = "PENDING or PAID", example = "PAID")
 	private PaymentStatus paymentStatus;
 
 	public Long getId() {
