@@ -167,4 +167,13 @@ left out:
    instead of `POST /api/reservations/{teacherId}/{roomId}/{hours}`, and no entities as request bodies.
 3. **Constructor injection** (`private final` fields) instead of `@Autowired` on fields.
 4. **Custom exceptions** (`NotFoundException`, `BusinessException`) instead of reusing `IllegalStateException`.
-5. **Swagger UI** via `springdoc-openapi` for a live API documentation page during the demo.
+
+---
+
+## 6. Swagger UI added
+
+- `pom.xml`: `org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0` (Spring Boot 4 compatible).
+- New `controller/HomeController.java`: `http://localhost:8080/` redirects to the Swagger UI.
+- Pages:
+  - `http://localhost:8080/swagger-ui.html` – interactive documentation of all endpoints ("Try it out")
+  - `http://localhost:8080/v3/api-docs` – OpenAPI JSON
